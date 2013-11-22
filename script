@@ -94,7 +94,7 @@
             slider.animate({marginLeft: -iNow * _this.width()}, 600);
             iNow++;
         };
-
+ 
         function autoPlayTop() {
         	if(iNow == lenghtLi) {
             	iNow = 0;
