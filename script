@@ -1,0 +1,118 @@
+(function($) {
+	$.fn.JBslider = function(options) {
+		var defaults = {
+			method: "left",
+			sliderID: "slider",
+			sliderIndexID: "sliderIndex"
+		};
+
+		var options = $.extend(defaults, options);
+
+        var _this = $(this);
+
+        var slider = $("#" + options.sliderID),
+            sliderIndex = $("#" + options.sliderIndexID),
+        	sliderLi = slider.find("li"),
+            sliderIndexLi = sliderIndex.find("li"),
+            lenghtLi = sliderIndexLi.length;
+
+        var timer = null,
+        	iNow = 1;
+
+        if(options.method == "left") {
+        	slider.width(_this.width() * lenghtLi);
+            sliderIndexLi.bind("click", function() {
+                var index = $(this).index();
+                $(this).addClass("current").siblings().removeClass("current");
+                if(!slider.is(":animated")) {
+                    slider.animate({
+                        marginLeft: -index * _this.width() 
+                    }, 600);
+                }
+                iNow = index + 1;
+            });
+
+            timer = setInterval(autoPlayLeft, 4000);
+
+            _this.bind("mouseover", function() {
+            	clearInterval(timer);
+            });
+
+            _this.bind("mouseout", function() {
+            	timer = setInterval(autoPlayLeft, 4000);	
+            });
+        }else if(options.method == "up") {
+            slider.height(_this.height() * lenghtLi);
+            sliderIndexLi.bind("click", function() {
+                var index = $(this).index();
+                $(this).addClass("current").siblings().removeClass("current");
+                if(!slider.is(":animated")) {
+                    slider.animate({
+                        marginTop: -index * _this.height() 
+                    }, 600);
+                }
+
+                iNow = index + 1;
+            });
+
+            timer = setInterval(autoPlayTop, 4000);
+
+	        _this.bind("mouseover", function() {
+	        	clearInterval(timer);
+	        });
+
+	        _this.bind("mouseout", function() {
+	            timer = setInterval(autoPlayTop, 4000);	
+	        });
+        }else if(options.method == "fade") {
+            sliderIndexLi.bind("click", function() {
+                var index = $(this).index();
+                $(this).addClass("current").siblings().removeClass("current");
+                if(!sliderLi.is(":animated")) {
+                    sliderLi.eq(index).show().animate({opacity: 1}, 1000).siblings().animate({opacity: 0}, 1000, function() {
+                    	$(this).hide();
+                    });
+                }
+            });
+
+            timer = setInterval(autoPlayFade, 4000);
+
+            _this.bind("mouseover", function() {
+            	clearInterval(timer);
+            });
+
+            _this.bind("mouseout", function() {
+            	timer = setInterval(autoPlayFade, 4000);
+            });
+        }
+
+        function autoPlayLeft() {
+        	if(iNow == lenghtLi) {
+            	iNow = 0;
+            } 
+            sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
+            slider.animate({marginLeft: -iNow * _this.width()}, 600);
+            iNow++;
+        };
+
+        function autoPlayTop() {
+        	if(iNow == lenghtLi) {
+            	iNow = 0;
+            } 
+            sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
+            slider.animate({marginTop: -iNow * _this.height()}, 600);
+            iNow++;
+        };
+
+        function autoPlayFade() {
+        	if(iNow == lenghtLi) {
+            	iNow = 0;
+            } 
+            sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
+            sliderLi.eq(iNow).show().animate({opacity: 1}, 1000).siblings().animate({opacity: 0}, 1000, function() {
+                $(this).hide();
+            });
+            iNow++;
+        };
+	};
+})(jQuery);
