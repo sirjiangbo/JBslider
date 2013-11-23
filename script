@@ -14,7 +14,7 @@
 
         var slider = $("#" + options.sliderID),
             sliderIndex = $("#" + options.sliderIndexID),
-                sliderLi = slider.find("li"),
+            sliderLi = slider.find("li"),
             sliderIndexLi = sliderIndex.find("li"),
             lenghtLi = sliderIndexLi.length;
 
@@ -98,8 +98,8 @@
         };
  
         function autoPlayTop() {
-                if(iNow == lenghtLi) {
-                    iNow = 0;
+            if(iNow == lenghtLi) {
+                iNow = 0;
             } 
             sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
             slider.animate({marginTop: -iNow * _this.height()}, options.duration);
@@ -107,8 +107,8 @@
         };
 
         function autoPlayFade() {
-                if(iNow == lenghtLi) {
-                    iNow = 0;
+            if(iNow == lenghtLi) {
+                iNow = 0;
             } 
             sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
             sliderLi.eq(iNow).show().animate({opacity: 1}, options.duration).siblings().animate({opacity: 0}, options.duration, function() {
