@@ -1,5 +1,4 @@
-
-/*将以下css加入你的cssz中*/
+/*将以下css加入你的css中, 根据需求修改属性值*/
 .sliderIndex{position:absolute;right:20px;bottom:20px;color:#fff;}
 .sliderIndex li{float:left;margin-left:10px;width:20px;height:20px;border-radius:4px;background:#3BCAD2;line-height:20px;text-align:center;cursor:pointer;}
 .sliderIndex li.current{background:#F36164;}
