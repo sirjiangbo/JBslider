@@ -1,57 +1,87 @@
 (function($) {
-        $.fn.JBslider = function(options) {
-            var defaults = {
-                method: "left",
-                sliderID: "slider",
-                sliderIndexID: "sliderIndex",
-                duration: 600,
-                interval: 4000
+    $.fn.JBslider = function(options) {
+        var defaults = {
+            method: "left",
+            sliderID: "slider",
+            duration: 600,
+            interval: 4000
         };
 
         var options = $.extend(defaults, options);
 
-        var _this = $(this);
+        var $this = $(this);
 
         var slider = $("#" + options.sliderID),
-            sliderIndex = $("#" + options.sliderIndexID),
             sliderLi = slider.find("li"),
-            sliderIndexLi = sliderIndex.find("li"),
-            lenghtLi = sliderIndexLi.length;
+            lenghtLi = sliderLi.length;
 
         var timer = null,
             iNow = 1;
 
+        var $sHtml = $('<ul class="sliderIndex"></ul>');
+
+        $this.append($sHtml);
+
+        for(var i = 0; i < lenghtLi; i++) {
+            if(i == 0) {
+                $this.find(".sliderIndex").append('<li class="current">' + (i+1) +'</li>')
+            }else{
+               $this.find(".sliderIndex").append('<li>' + (i+1) +'</li>');
+            }
+        }
+
+        var sliderIndexLi = $this.find(".sliderIndex li");
+
+        var animationMethod = {
+            toggleClass: function(des) {
+                sliderIndexLi.eq(des).addClass("current").siblings().removeClass("current");
+            },
+            left: function(des) {
+                this.toggleClass(des);
+                slider.animate({marginLeft: -des * $this.width()}, options.duration);
+            },
+            top: function(des) {
+                this.toggleClass(des);
+                slider.animate({marginTop: -des * $this.height()}, options.duration);
+            },
+            fade: function(des) {
+                this.toggleClass(des);
+                sliderLi.eq(des).show().animate({opacity: 1}, options.duration).siblings().animate({opacity: 0}, options.duration, function() {
+                    $(this).hide();
+                });
+            }
+        };
+
         if(options.method == "left") {
-            slider.width(_this.width() * lenghtLi);
+            slider.width($this.width() * lenghtLi);
+
             sliderIndexLi.bind("click", function() {
                 var index = $(this).index();
-                $(this).addClass("current").siblings().removeClass("current");
+
                 if(!slider.is(":animated")) {
-                    slider.animate({
-                        marginLeft: -index * _this.width() 
-                    }, options.duration);
+                    animationMethod.left(index);
                 }
+
                 iNow = index + 1;
             });
 
             timer = setInterval(autoPlayLeft, options.interval);
 
-            _this.bind("mouseover", function() {
-                    clearInterval(timer);
+            $this.bind("mouseover", function() {
+                clearInterval(timer);
             });
 
-            _this.bind("mouseout", function() {
-                    timer = setInterval(autoPlayLeft, options.interval);        
+            $this.bind("mouseout", function() {
+                timer = setInterval(autoPlayLeft, options.interval);        
             });
-        }else if(options.method == "up") {
-            slider.height(_this.height() * lenghtLi);
+        }else if(options.method == "top") {
+            slider.height($this.height() * lenghtLi);
+
             sliderIndexLi.bind("click", function() {
                 var index = $(this).index();
-                $(this).addClass("current").siblings().removeClass("current");
+
                 if(!slider.is(":animated")) {
-                    slider.animate({
-                        marginTop: -index * _this.height() 
-                    }, options.duration);
+                    animationMethod.top(index);
                 }
 
                 iNow = index + 1;
@@ -59,41 +89,38 @@
 
             timer = setInterval(autoPlayTop, options.interval);
 
-            _this.bind("mouseover", function() {
-                 clearInterval(timer);
+            $this.bind("mouseover", function() {
+                clearInterval(timer);
             });
 
-            _this.bind("mouseout", function() {
+            $this.bind("mouseout", function() {
                 timer = setInterval(autoPlayTop, options.interval);        
             });
         }else if(options.method == "fade") {
             sliderIndexLi.bind("click", function() {
                 var index = $(this).index();
-                $(this).addClass("current").siblings().removeClass("current");
+
                 if(!sliderLi.is(":animated")) {
-                    sliderLi.eq(index).show().animate({opacity: 1}, options.duration).siblings().animate({opacity: 0}, options.duration, function() {
-                            $(this).hide();
-                    });
+                    animationMethod.fade(index);
                 }
             });
 
             timer = setInterval(autoPlayFade, options.interval);
 
-            _this.bind("mouseover", function() {
-                    clearInterval(timer);
+            $this.bind("mouseover", function() {
+                clearInterval(timer);
             });
 
-            _this.bind("mouseout", function() {
-                    timer = setInterval(autoPlayFade, options.interval);
+            $this.bind("mouseout", function() {
+                timer = setInterval(autoPlayFade, options.interval);
             });
         }
 
         function autoPlayLeft() {
-                if(iNow == lenghtLi) {
-                    iNow = 0;
+            if(iNow == lenghtLi) {
+                iNow = 0;
             } 
-            sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
-            slider.animate({marginLeft: -iNow * _this.width()}, options.duration);
+            animationMethod.left(iNow);
             iNow++;
         };
  
@@ -101,8 +128,7 @@
             if(iNow == lenghtLi) {
                 iNow = 0;
             } 
-            sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
-            slider.animate({marginTop: -iNow * _this.height()}, options.duration);
+            animationMethod.top(iNow);
             iNow++;
         };
 
@@ -110,10 +136,7 @@
             if(iNow == lenghtLi) {
                 iNow = 0;
             } 
-            sliderIndexLi.eq(iNow).addClass("current").siblings().removeClass("current");
-            sliderLi.eq(iNow).show().animate({opacity: 1}, options.duration).siblings().animate({opacity: 0}, options.duration, function() {
-                $(this).hide();
-            });
+            animationMethod.fade(iNow);
             iNow++;
         };
     };
