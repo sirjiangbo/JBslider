@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JBslider</title>
+	<style>
+	*{margin:0;padding:0;}
+	ul{list-style:none;}
+
+	.sliderBox{position:relative;margin:20px auto;width:500px;height:300px;overflow:hidden;}
+	#slider li{float:left;width:500px;height:300px;}
+	.sliderIndex{position:absolute;right:20px;bottom:20px;color:#fff;}
+	.sliderIndex li{float:left;margin-left:10px;width:20px;height:20px;border-radius:4px;background:#3BCAD2;line-height:20px;text-align:center;cursor:pointer;}
+	.sliderIndex li.current{background:#F36164;}
+
+	.sliderBox1{position:relative;margin:20px auto;width:500px;height:300px;overflow:hidden;}
+	#slider1 li{width:500px;height:300px;}
+
+	.sliderBox2{position:relative;margin:20px auto;width:500px;height:300px;overflow:hidden;}
+	#slider2 li{position:absolute;width:500px;height:300px;display:none;opacity:0;}
+	#slider2 li.first{display:block;opacity:1;}
+	</style>
+</head>
+<body>
+	<div class="sliderBox">
+		<ul id="slider">
+			<li><img width="500" height="300" src="pic1.jpg" /></li>
+			<li><img width="500" height="300" src="pic2.jpg" /></li>
+			<li><img width="500" height="300" src="pic3.jpg" /></li>
+		</ul>
+	</div>
+
+	<div class="sliderBox1">
+		<ul id="slider1">
+			<li><img width="500" height="300" src="pic1.jpg" /></li>
+			<li><img width="500" height="300" src="pic2.jpg" /></li>
+			<li><img width="500" height="300" src="pic3.jpg" /></li>
+		</ul>
+	</div>
+
+	<div class="sliderBox2">
+		<ul id="slider2">
+			<li class="first"><img width="500" height="300" src="pic1.jpg" /></li>
+			<li><img width="500" height="300" src="pic2.jpg" /></li>
+			<li><img width="500" height="300" src="pic3.jpg" /></li>
+		</ul>
+	</div>
+
+	<script src="jquery-1.9.1.min.js"></script>
+	<script src="JBslider.js"></script>
+	<script>
+	$(function() {
+		$(".sliderBox").JBslider();
+	})
+
+	$(function() {
+		$(".sliderBox1").JBslider({method: "top", sliderID: "slider1"});
+	})
+
+	$(function() {
+		$(".sliderBox2").JBslider({method: "fade", sliderID: "slider2"});
+	})
+	</script>
+</body>
+</html>
